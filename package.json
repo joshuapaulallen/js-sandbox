@@ -1,0 +1,23 @@
+{
+  "name": "js-sandbox",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --config test/.mocharc.yml './test/**/*.spec.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshuapaulallen/js-sandbox.git"
+  },
+  "author": "joshuapaulallen",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/joshuapaulallen/js-sandbox/issues"
+  },
+  "homepage": "https://github.com/joshuapaulallen/js-sandbox#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2"
+  }
+}
