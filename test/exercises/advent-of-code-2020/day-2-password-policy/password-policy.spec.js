@@ -19,7 +19,7 @@ describe('Advent of Code 2020 - Day 2', () => {
                 '3-9 c: acacacacacacacacaca',
             ];
             goodPasswords.forEach((password) => {
-                expect(passwordPolicies.checkPasswordPositional(password)).to.equal(true);
+                expect(passwordPolicies.checkPasswordLetterFrequency(password)).to.equal(true);
             });
         });
 
