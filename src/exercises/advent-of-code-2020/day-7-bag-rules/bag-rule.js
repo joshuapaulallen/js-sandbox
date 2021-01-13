@@ -47,7 +47,7 @@ class BagRule {
      * @param {BagType} bagType
      * @returns {number}
      */
-    calculateCapacity(bagType) {
+    calculateCapacityForTargetBagType(bagType) {
         // look for a bag type in our list of counts
         const foundBagTypeCount = this.bagTypeCounts.find((bagTypeCount) => bagType.toString() === bagTypeCount.bagType.toString());
         if (!foundBagTypeCount) {
@@ -55,6 +55,14 @@ class BagRule {
         }
 
         return foundBagTypeCount.count;
+    }
+
+    /**
+     * Calculate how many bags of any bag type can be directly contained in this bag.
+     * @returns {number}
+     */
+    calculateTotalBagCapacity() {
+        return this.bagTypeCounts.reduce((a, c) => a + c.count, 0);
     }
 }
 

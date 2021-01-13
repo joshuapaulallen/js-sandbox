@@ -25,16 +25,36 @@ class BagRuleSet {
      * @param {BagType} bagType - The bag type in which to look.
      * @param {BagType} targetBagType - the sought-after bag type
      */
-    calculateBagCapacity(bagType, targetBagType) {
+    calculateBagCapacityForTargetBagType(bagType, targetBagType) {
         const bagRule = this.bagRuleLookup[bagType.toString()];
         if (!bagRule) {
             return 0;
         }
 
-        let containsCount = bagRule.calculateCapacity(targetBagType);
+        let containsCount = bagRule.calculateCapacityForTargetBagType(targetBagType);
 
         for (const bagRuleCount of bagRule.bagTypeCounts) {
-            containsCount += this.calculateBagCapacity(bagRuleCount.bagType, targetBagType) * bagRuleCount.count;
+            containsCount += this.calculateBagCapacityForTargetBagType(bagRuleCount.bagType, targetBagType) * bagRuleCount.count;
+        }
+
+        return containsCount;
+    }
+
+    /**
+     * Calculate how many bags of any bag type can be eventually contained a bag with the given type.
+     * @param {BagType} bagType
+     * @returns {number}
+     */
+    calculateTotalBagCapacity(bagType) {
+        const bagRule = this.bagRuleLookup[bagType.toString()];
+        if (!bagRule) {
+            return 0;
+        }
+
+        let containsCount = bagRule.calculateTotalBagCapacity();
+
+        for (const bagRuleCount of bagRule.bagTypeCounts) {
+            containsCount += this.calculateTotalBagCapacity(bagRuleCount.bagType) * bagRuleCount.count;
         }
 
         return containsCount;
