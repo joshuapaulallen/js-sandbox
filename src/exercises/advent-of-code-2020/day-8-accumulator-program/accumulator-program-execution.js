@@ -2,15 +2,16 @@ class AccumulatorProgramExecution {
     constructor(lines) {
         this.currentLine = 0;
         this.accumulator = 0;
-        this.program = lines.map((line) => { return { line, executionCount: 0 } });
+        this.program = lines.slice();
+        this.programLog = lines.map((line) => { return { line, executionCount: 0 } });
     }
 
     step() {
         // grab the line to be executed
-        const lineToExecute = this.program[this.currentLine];
+        const lineToExecute = this.programLog[this.currentLine];
 
         // do the thing
-        const command = this.program[this.currentLine].line;
+        const command = this.programLog[this.currentLine].line;
         switch(command.operation) {
             case 'nop':
                 this.currentLine += 1;
@@ -31,9 +32,9 @@ class AccumulatorProgramExecution {
     }
 
     execute() {
-        while (this.currentLine < this.program.length) {
+        while (this.currentLine < this.programLog.length) {
             // if the line has been previously executed, throw an error
-            if (this.program[this.currentLine].executionCount > 0) {
+            if (this.programLog[this.currentLine].executionCount > 0) {
                 throw new Error(`line '${this.currentLine}' was already executed, stopping execution to prevent infinite loop`);
             }
 
