@@ -17,4 +17,12 @@ describe('Advent of Code 2021 - Day 1', () => {
         expect(result).to.not.be.null;
         console.log(`${result}: ${new Date() - start} ms`);
     });
+
+    it('should calculate the number of times an increase occurs between subsets in a list of numbers', async () => {
+        const depths = await fs.readFileSync(inputFile, 'utf-8').split('\n').map((line) => Number(line));
+        const start = new Date();
+        const result = depthDetectorSpec.calculateNumIncreases(depths, 3);
+        expect(result).to.not.be.null;
+        console.log(`${result}: ${new Date() - start} ms`);
+    });
 });
