@@ -8,10 +8,20 @@ class Coordinates {
 
 }
 
+class AimCoordinates {
+
+    constructor(xPos, depth, aim) {
+        this.xPos = xPos;
+        this.depth = depth;
+        this.aim = aim;
+    }
+
+}
+
 class Vector {
 
-    constructor(direction, magnitude) {
-        this.direction = direction;
+    constructor(moveType, magnitude) {
+        this.direction = moveType;
         this.magnitude = magnitude;
     }
 
@@ -41,8 +51,35 @@ function move(from, vector) {
     return newCoordinates;
 }
 
+/**
+ * Move the sub from the given coordinates.
+ *
+ * @param from {AimCoordinates} The starting three-dimensional aim coordinates.
+ * @param vector {Vector}       The direction/magnitude of the desired move.
+ */
+function moveWithAim(from, vector) {
+    var newCoordinates = { ...from };
+
+    switch (vector.direction) {
+        case 'forward':
+            newCoordinates.xPos += vector.magnitude;
+            newCoordinates.depth += (vector.magnitude * from.aim);
+            break;
+        case 'up':
+            newCoordinates.aim -= vector.magnitude;
+            break;
+        case 'down':
+            newCoordinates.aim += vector.magnitude;
+            break;
+    }
+
+    return newCoordinates;
+}
+
 module.exports = {
     Coordinates,
+    AimCoordinates,
     Vector,
-    move
+    move,
+    moveWithAim
 }
