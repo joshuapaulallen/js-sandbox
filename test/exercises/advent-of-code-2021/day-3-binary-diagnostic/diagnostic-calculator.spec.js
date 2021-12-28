@@ -64,7 +64,7 @@ describe('Advent of Code 2021 - Day 3', () => {
         expect(oxy * co2).to.equal(230);
     });
 
-    it.only('should calculate gamma and epsilon rates from an input file and multiply them together', async () => {
+    it('should calculate gamma and epsilon rates from an input file and multiply them together', async () => {
         const input = await fs.readFileSync(inputFile, 'utf-8').split('\n');
         const start = new Date();
 
