@@ -50,7 +50,7 @@ describe('Advent of Code 2021 - Day 4', () => {
             )
         ];
 
-        const winningBoardScore = BingoGame.play(nums, bingoBoards);
+        const winningBoardScore = BingoGame.playQuick(nums, bingoBoards);
         expect(winningBoardScore).to.equal(4512);
     });
 
@@ -62,9 +62,22 @@ describe('Advent of Code 2021 - Day 4', () => {
         const bingoBoardInput = input.slice(2);
         const bingoBoardStrs = bingoBoardInput.join('\n').split('\n\n');
         const bingoBoards = bingoBoardStrs.map(bingoBoardStr => BingoBoard.parse(bingoBoardStr));
-        const winningBoardScore = BingoGame.play(nums, bingoBoards);
+        const firstWinningBoardScore = BingoGame.playQuick(nums, bingoBoards);
 
-        console.log(`${winningBoardScore}: ${new Date() - start} ms`);
+        console.log(`${firstWinningBoardScore}: ${new Date() - start} ms`);
+    });
+
+    it('from a large input file, should apply numbers to a series of bingo cards until all of them are solved', async () => {
+        const input = await fs.readFileSync(inputFile, 'utf-8').split('\n');
+        const start = new Date();
+
+        const nums = input[0].split(',');
+        const bingoBoardInput = input.slice(2);
+        const bingoBoardStrs = bingoBoardInput.join('\n').split('\n\n');
+        const bingoBoards = bingoBoardStrs.map(bingoBoardStr => BingoBoard.parse(bingoBoardStr));
+        const lastWinningBoardScore = BingoGame.playFull(nums, bingoBoards);
+
+        console.log(`${lastWinningBoardScore}: ${new Date() - start} ms`);
     });
 
 });

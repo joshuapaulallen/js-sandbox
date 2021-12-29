@@ -103,18 +103,45 @@ class BingoBoard {
 class BingoGame {
 
     /**
-     * Play a bingo game with the given set of input numbers and bingo boards.
+     * Play a bingo game with the given set of input numbers and bingo boards. As soon as the first winning board is
+     * encountered, return the score of that board.
      *
-     * @returns {null|number} The score of the winning BingoBoard, or null if there was no winner.
+     * @returns {null|number} The score of the *first* winning BingoBoard, or null if there was no winner.
      */
-    static play(nums, bingoBoards) {
+    static playQuick(nums, bingoBoards) {
         for (var i = 0; i < nums.length; i++) {
             const num = Number(nums[i]);
             for (var j = 0; j < bingoBoards.length; j++) {
                 bingoBoards[j].mark(num);
                 if (bingoBoards[j].isSolved()) {
-                    console.log(`WINNER! ${bingoBoards[j].sumUnmarked()} * ${num}`);
                     return bingoBoards[j].sumUnmarked() * num;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Play a bingo game with the given set of input numbers and bingo boards. Play until all numbers are used or
+     * until every bingo board is a winner.
+     *
+     * @returns {null|number} The score of the *last* winning BingoBoard, or null if there was no winner.
+     */
+    static playFull(nums, bingoBoards) {
+        const boards = [ ...bingoBoards ];
+
+        for (var i = 0; i < nums.length; i++) {
+            const num = Number(nums[i]);
+            for (var j = 0; j < boards.length; j++) {
+                boards[j].mark(num);
+                if (boards[j].isSolved()) {
+                    if (boards.length === 1) {
+                        return boards[j].sumUnmarked() * num;
+                    } else {
+                        boards.splice(j, 1);
+                    }
+
                 }
             }
         }
