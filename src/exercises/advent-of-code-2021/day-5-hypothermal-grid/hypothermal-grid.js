@@ -15,6 +15,10 @@ class Point {
     }
 }
 
+Point.prototype.toString = function() {
+    return `(${this.x}, ${this.y})`;
+}
+
 class Vector {
 
     /**
@@ -49,6 +53,10 @@ class HypothermalGridPoint {
 
 }
 
+HypothermalGridPoint.prototype.toString = function () {
+    return `${this.point.toString()}: ${this.ventCount}`;
+}
+
 class HypothermalGrid {
 
     /**
@@ -60,9 +68,9 @@ class HypothermalGrid {
             points.push(v.from, v.to);
         });
 
-        const xMax = this.findXMax(points);
-        const yMax = this.findYMax(points);
-        this.points = this.initPoints(xMax, yMax);
+        this.xMax = this.findXMax(points);
+        this.yMax = this.findYMax(points);
+        this.points = this.initPoints(this.xMax, this.yMax);
 
         vectors.forEach(v => this.markVents(v));
     }
@@ -98,7 +106,7 @@ class HypothermalGrid {
     /**
      * @param x {number}
      * @param y {number}
-     * @returns {Point}
+     * @returns {HypothermalGridPoint}
      */
     getPoint(x, y) {
         return this.points[x.toString()][y.toString()];
@@ -126,6 +134,16 @@ class HypothermalGrid {
             for (let y = fromY; y <= toY; y++) {
                 pointsToMark.push(this.getPoint(vector.from.x, y));
             }
+        } else if (xDelta !== 0 & yDelta !== 0 && Math.abs(xDelta) === Math.abs(yDelta)) {
+            // this is a 45-degree diagonal line
+            let x = vector.from.x
+            let y = vector.from.y;
+            const size = Math.abs(vector.to.x - vector.from.x);
+            for (let count = 0; count <= size; count++) {
+                pointsToMark.push(this.getPoint(x, y));
+                x = vector.from.x < vector.to.x ? x+1 : x-1;
+                y = vector.from.y < vector.to.y ? y+1 : y-1;
+            }
         }
 
         pointsToMark.forEach(p => p.markVent());
@@ -147,6 +165,19 @@ class HypothermalGrid {
         });
 
         return pointsByVentCount;
+    }
+
+    toPrintableGrid() {
+        let grid = '';
+        for (let y = 0; y <= this.yMax; y++) {
+            let row = '';
+            for (let x = 0; x <= this.xMax; x++) {
+                row += this.getPoint(x, y).ventCount;
+            }
+            grid += row + '\n';
+        }
+
+        return grid;
     }
 
 }

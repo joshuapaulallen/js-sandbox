@@ -4,7 +4,7 @@ const { Vector, HypothermalGrid } = require('../../../../src/exercises/advent-of
 describe('Advent of Code 2021 - Day 5', () => {
     const inputFile = './test/exercises/advent-of-code-2021/day-5-hypothermal-grid/input.txt';
 
-    it('should overlapping points in a hypothermal grid', () => {
+    it('should count overlapping points in a hypothermal grid', () => {
         const inputStr = '0,9 -> 5,9\n' +
             '8,0 -> 0,8\n' +
             '9,4 -> 3,4\n' +
@@ -25,10 +25,12 @@ describe('Advent of Code 2021 - Day 5', () => {
             .map(ventCount => pointsByVentCount[ventCount].length)
             .reduce((a, c) => a + c, 0);
 
-        expect(pointsWithMultipleVents).to.equal(5);
+        expect(pointsWithMultipleVents).to.equal(12);
+
+        // console.log(grid.toPrintableGrid());
     });
 
-    it('should overlapping points in a large hypothermal grid', async () => {
+    it('should count overlapping points in a large hypothermal grid', async () => {
         const vectorStrs = await fs.readFileSync(inputFile, 'utf-8').trim().split('\n');
         const start = new Date();
 
