@@ -36,17 +36,17 @@ class CrabAligner {
     /**
      * By brute force, calculate the xPos that aligns all the crabs using the minimal amount of fuel.
      *
+     * @param calculateFuel {function}
      * @return CrabAlignerResult
      */
-    calculateOptimalAlignment() {
+    calculateOptimalAlignment(calculateFuel = this.calculateFuelToAlignSimple) {
         const minX = this.calcMinX();
         const maxX = this.calcMaxX();
-        console.log(`from ${minX} to ${maxX}`);
 
         let optimalX = null;
         let optimalFuel = null;
         for (let x = minX; x <= maxX; x++) {
-            const fuelNeeded = this.calculateFuelToAlign(x);
+            const fuelNeeded = calculateFuel(x, this.crabs);
             if (!optimalFuel || optimalFuel > fuelNeeded) {
                 optimalX = x;
                 optimalFuel = fuelNeeded;
@@ -56,10 +56,44 @@ class CrabAligner {
         return new CrabAlignerResult(optimalX, optimalFuel);
     }
 
-    calculateFuelToAlign(x) {
-        return this.crabs
+    /**
+     * Calculate the fuel needed to move all crabs to the given position, assuming every unit of distance requires one
+     * fuel.
+     *
+     * @param x {number}
+     * @param crabs {Crab[]}
+     * @return {number}
+     */
+    calculateFuelToAlignSimple(x, crabs) {
+        return crabs
             // calculate the distance of each crab to the target X position
             .map(c => Math.abs(c.x - x))
+            // sum them all
+            .reduce((a, c) => a + c, 0);
+    }
+
+    /**
+     * Calculate the fuel needed to move all crabs to the given position, assuming the first unit of distance costs
+     * one fuel, the second costs two, the third costs three, etc
+     * fuel.
+     *
+     * @param x {number}
+     * @param crabs {Crab[]}
+     * @return {number}
+     */
+    calculateFuelToAlignIncremental(x, crabs) {
+        return crabs
+            // calculate the distance of each crab to the target X position
+            .map(c => Math.abs(c.x - x))
+            // transform the delta into the true fuel cost (instead of one fuel per unit, it's 1 for the first, 2 for
+            // the second, etc)
+            .map(i => {
+                let fuelCost = 0;
+                for (let j = i; j > 0; j--) {
+                    fuelCost += j;
+                }
+                return fuelCost;
+            })
             // sum them all
             .reduce((a, c) => a + c, 0);
     }
